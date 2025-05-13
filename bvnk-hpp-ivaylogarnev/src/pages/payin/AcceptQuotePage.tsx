@@ -1,7 +1,7 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
   Select,
@@ -26,8 +26,9 @@ import { paymentService } from '@/services/paymentService';
 
 const AcceptQuotePage = () => {
   const { uuid } = useParams<{ uuid: string }>();
-  const [selectedCurrency, setSelectedCurrency] = useState<string>('');
+  const navigate = useNavigate();
 
+  const [selectedCurrency, setSelectedCurrency] = useState<string>('');
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -88,6 +89,20 @@ const AcceptQuotePage = () => {
   const handleSelectedCurrency = (value: string) => {
     setSelectedCurrency(value);
     updatePaymentSummary.mutate();
+  };
+
+  const handleConfirm = async () => {
+    const data = await paymentService.acceptPaymentSummary(uuid!, {
+      successUrl: 'no_url_needed'
+    });
+
+    if (data) {
+      navigate(`/payin/${uuid}/pay`, {
+        state: {
+          paymentSummary: data
+        }
+      });
+    }
   };
 
   return (
@@ -164,7 +179,9 @@ const AcceptQuotePage = () => {
             <Separator className="!w-[89%] my-1 bg-gray-200 mx-auto" />
 
             <CardFooter className="relative justify-between mt-4">
-              <Button className="w-full">Confirm</Button>
+              <Button className="w-full" onClick={handleConfirm}>
+                Confirm
+              </Button>
             </CardFooter>
           </div>
         )}
