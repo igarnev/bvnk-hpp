@@ -1,16 +1,25 @@
+import { usePaymentSummary } from '@/hooks/usePaymentSummary';
 import { CardHeader, CardTitle } from '@components/ui/card';
+import { useMemo } from 'react';
 
-interface AcceptQuoteHeaderProps {
-  readonly displayAmount?: number;
-  readonly displayCurrency?: string;
-  readonly reference?: string;
-}
+export const AcceptQuoteHeader = () => {
+  const { paymentSummary } = usePaymentSummary();
 
-export const AcceptQuoteHeader = ({
-  displayAmount,
-  displayCurrency,
-  reference
-}: AcceptQuoteHeaderProps) => {
+  const displayAmount = useMemo(
+    () => paymentSummary?.displayCurrency.amount,
+    [paymentSummary?.displayCurrency.amount]
+  );
+
+  const displayCurrency = useMemo(
+    () => paymentSummary?.displayCurrency.currency,
+    [paymentSummary?.displayCurrency.currency]
+  );
+
+  const reference = useMemo(
+    () => paymentSummary?.reference,
+    [paymentSummary?.reference]
+  );
+
   return (
     <CardHeader className="flex flex-col items-center text-center">
       <CardTitle className="text-lg">Merchant Display Name</CardTitle>

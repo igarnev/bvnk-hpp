@@ -1,21 +1,31 @@
+import { usePaymentSummary } from '@/hooks/usePaymentSummary';
 import { CardFooter } from '@components/ui/card';
 import { Separator } from '@components/ui/separator';
 
-import { formatTime } from '@utils/helpers/timer';
+import { useNavigate } from 'react-router-dom';
+import { CountdownTimer } from '../common/CountdownTimer';
+import { useMemo } from 'react';
 
-interface PayTimeRemainingProps {
-  readonly timeLeft: number;
-}
+export const PayTimeRemaining = () => {
+  const navigate = useNavigate();
+  const { paymentSummary } = usePaymentSummary();
 
-export const PayTimeRemaining = ({ timeLeft }: PayTimeRemainingProps) => {
+  const expiryDate = useMemo(
+    () => Number(paymentSummary?.acceptanceExpiryDate),
+    [paymentSummary?.acceptanceExpiryDate]
+  );
+
   return (
     <>
-      <Separator className="!w-[89%] bg-gray-200 mx-auto" />
+      <Separator className="bg-gray-200 mx-auto" />
       <CardFooter className="relative justify-between">
         <div className="text-muted-foreground">Time left to pay:</div>
-        <div>{formatTime(timeLeft)}</div>
+        <CountdownTimer
+          expiryDate={expiryDate}
+          onExpire={() => navigate(`/expired`)}
+        />
       </CardFooter>
-      <Separator className="!w-[89%] bg-gray-200 mx-auto" />
+      <Separator className="bg-gray-200 mx-auto" />
     </>
   );
 };

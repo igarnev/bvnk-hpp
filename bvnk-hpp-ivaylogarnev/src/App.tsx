@@ -6,7 +6,6 @@ import { PayQuotePage } from '@pages/PayQuotePage';
 import { ExpiredPage } from '@pages/ExpiredPage';
 import { NotFoundPage } from '@pages/NotFoundPage';
 
-import { PaymentRouteGuard } from '@components/guards/PaymentRouteGuard';
 import { PaymentInProgressGuard } from '@components/guards/PaymentInProgressGuard';
 
 export const App = () => {
@@ -17,10 +16,8 @@ export const App = () => {
         <Route path="/" element={<HomePage />} />
 
         {/* Payment routes */}
-        <Route element={<PaymentRouteGuard />}>
-          <Route element={<PaymentInProgressGuard />}>
-            <Route path="/payin/:uuid" element={<AcceptQuotePage />} />
-          </Route>
+        <Route element={<PaymentInProgressGuard />}>
+          <Route path="/payin/:uuid" element={<AcceptQuotePage />} />
           <Route path="/payin/:uuid/pay" element={<PayQuotePage />} />
         </Route>
         <Route path="/expired" element={<ExpiredPage />} />

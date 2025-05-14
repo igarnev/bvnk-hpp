@@ -1,10 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useMemo, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-
-import { useTimer } from '@hooks/useTimer';
-
-import type { PaymentSummary } from '@models/payment';
 
 import { Card } from '@components/ui/card';
 import { PayQuoteHeader } from '@components/pay-quote/PayQuoteHeader';
@@ -13,29 +8,23 @@ import { PaymentAddress } from '@components/pay-quote/PaymentAddress';
 import { QrCodeSection } from '@components/pay-quote/QrCodeSection';
 import { PayTimeRemaining } from '@components/pay-quote/PayTimeRemaining';
 
-export const PayQuotePage = () => {
-  const { uuid } = useParams<{ uuid: string }>();
-  const navigate = useNavigate();
+import { usePaymentSummary } from '@hooks/usePaymentSummary';
 
-  const [paymentSummary, setPaymentSummary] = useState<PaymentSummary | null>(
-    null
-  );
+export const PayQuotePage = () => {
+  const { paymentSummary } = usePaymentSummary();
   const [copied, setCopied] = useState<{ [key: string]: boolean }>({});
 
-  useEffect(() => {
-    setPaymentSummary(
-      JSON.parse(localStorage.getItem('payInProgressSummary') || '{}')
-    );
-  }, [uuid]);
+  const address = useMemo(
+    () => paymentSummary?.address?.address,
+    [paymentSummary]
+  );
 
-  const { timeLeft } = useTimer({
-    expiryDate: paymentSummary?.expiryDate,
-    onExpire: () => {
-      navigate(`/expired`);
-    }
-  });
+  const currency = useMemo(
+    () => paymentSummary?.paidCurrency.currency,
+    [paymentSummary]
+  );
 
-  if (!paymentSummary?.address?.address) {
+  if (!address) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100">
         <Loader2 className="h-8 w-8 animate-spin text-[#3f53dd]" />
@@ -43,30 +32,18 @@ export const PayQuotePage = () => {
     );
   }
 
-  const { address, paidCurrency } = paymentSummary;
-
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <Card className="w-full max-w-md bg-white">
-        <PayQuoteHeader currency={paidCurrency.currency || 'N/A'} />
+      <Card className="w-full max-w-md bg-white px-6">
+        <PayQuoteHeader currency={currency || 'N/A'} />
 
-        <AmountDue
-          amount={paidCurrency.amount || 0}
-          currency={paidCurrency.currency || 'N/A'}
-          copied={copied}
-          setCopied={setCopied}
-        />
+        <AmountDue copied={copied} setCopied={setCopied} />
 
-        <PaymentAddress
-          address={address.address || ''}
-          currency={paidCurrency.currency || 'N/A'}
-          copied={copied}
-          setCopied={setCopied}
-        />
+        <PaymentAddress copied={copied} setCopied={setCopied} />
 
-        <QrCodeSection address={address.address || ''} />
+        <QrCodeSection address={address || ''} />
 
-        <PayTimeRemaining timeLeft={timeLeft} />
+        <PayTimeRemaining />
       </Card>
     </div>
   );

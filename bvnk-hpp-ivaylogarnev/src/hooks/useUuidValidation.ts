@@ -14,9 +14,9 @@ export const useUuidValidation = () => {
     const result = uuidSchema.uuid.safeParse(value);
     if (!result.success) {
       setError(result.error.errors[0].message);
-    } else {
-      setError('');
+      return;
     }
+    setError('');
   };
 
   return {

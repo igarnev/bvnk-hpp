@@ -3,23 +3,30 @@ import { handleCopyText } from '@utils/helpers/copy-text';
 import { CardContent } from '@components/ui/card';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
+import { usePaymentSummary } from '@/hooks/usePaymentSummary';
+import { useMemo } from 'react';
 
 interface AmountDueProps {
-  readonly amount: number;
-  readonly currency: string;
   readonly copied: { [key: string]: boolean };
   readonly setCopied: (value: { [key: string]: boolean }) => void;
 }
 
-export const AmountDue = ({
-  amount,
-  currency,
-  copied,
-  setCopied
-}: AmountDueProps) => {
+export const AmountDue = ({ copied, setCopied }: AmountDueProps) => {
+  const { paymentSummary } = usePaymentSummary();
+
+  const amount = useMemo(
+    () => paymentSummary?.paidCurrency.amount.toString(),
+    [paymentSummary?.paidCurrency.amount]
+  );
+
+  const currency = useMemo(
+    () => paymentSummary?.paidCurrency.currency,
+    [paymentSummary?.paidCurrency.currency]
+  );
+
   return (
     <>
-      <Separator className="!w-[89%] bg-gray-200 mx-auto" />
+      <Separator className=" bg-gray-200 mx-auto" />
       <CardContent className="flex justify-between py-1">
         <div className="text-muted-foreground">Amount due:</div>
         <div
@@ -33,9 +40,7 @@ export const AmountDue = ({
             className={`cursor-pointer p-2 ${
               copied['amount'] ? 'text-[#6373e3]' : 'text-[#3f53dd]'
             }`}
-            onClick={() =>
-              handleCopyText(amount.toString(), 'amount', setCopied)
-            }
+            onClick={() => handleCopyText(amount || '', 'amount', setCopied)}
           >
             {copied['amount'] ? 'Copied!' : 'Copy'}
           </Button>

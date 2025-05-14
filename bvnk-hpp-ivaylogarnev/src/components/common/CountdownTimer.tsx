@@ -1,13 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { updateTimerFromExpiryDate } from '@utils/helpers/timer';
+import { formatTime, updateTimerFromExpiryDate } from '@utils/helpers/timer';
+import { Loader2 } from 'lucide-react';
 
-interface UseTimerProps {
-  readonly expiryDate?: string | number | null;
-  readonly onExpire?: () => void;
+interface CountdownTimerProps {
+  readonly expiryDate: number;
+  readonly onExpire: () => void;
+  readonly isPending?: boolean;
 }
 
-export const useTimer = ({ expiryDate, onExpire }: UseTimerProps) => {
+export const CountdownTimer = ({
+  expiryDate,
+  onExpire,
+  isPending
+}: CountdownTimerProps) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
@@ -40,5 +46,13 @@ export const useTimer = ({ expiryDate, onExpire }: UseTimerProps) => {
     };
   }, [timeLeft, expiryDate, onExpire]);
 
-  return { timeLeft };
+  return (
+    <div>
+      {isPending ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        formatTime(timeLeft)
+      )}
+    </div>
+  );
 };
