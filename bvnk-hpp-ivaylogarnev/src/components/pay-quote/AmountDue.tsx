@@ -1,10 +1,12 @@
+import { useMemo } from 'react';
+
 import { handleCopyText } from '@utils/helpers/copy-text';
 
 import { CardContent } from '@components/ui/card';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
-import { usePaymentSummary } from '@/hooks/usePaymentSummary';
-import { useMemo } from 'react';
+
+import { usePaymentSummary } from '@hooks/usePaymentSummary';
 
 interface AmountDueProps {
   readonly copied: { [key: string]: boolean };

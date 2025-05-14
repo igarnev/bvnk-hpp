@@ -1,10 +1,11 @@
-import { usePaymentSummary } from '@/hooks/usePaymentSummary';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { CountdownTimer } from '@components/common/CountdownTimer';
 import { CardFooter } from '@components/ui/card';
 import { Separator } from '@components/ui/separator';
 
-import { useNavigate } from 'react-router-dom';
-import { CountdownTimer } from '../common/CountdownTimer';
-import { useMemo } from 'react';
+import { usePaymentSummary } from '@hooks/usePaymentSummary';
 
 export const PayTimeRemaining = () => {
   const navigate = useNavigate();

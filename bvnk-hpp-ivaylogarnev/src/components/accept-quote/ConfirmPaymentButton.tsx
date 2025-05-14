@@ -1,6 +1,7 @@
+import { useAcceptPayment } from '@hooks/useAcceptPayment';
+
 import { CardFooter } from '@components/ui/card';
 import { Button } from '@components/ui/button';
-import { useAcceptPayment } from '@/hooks/useAcceptPayment';
 
 export const ConfirmPaymentButton = () => {
   const { acceptPayment } = useAcceptPayment();

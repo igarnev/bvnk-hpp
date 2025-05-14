@@ -1,9 +1,12 @@
+import { useMemo } from 'react';
+
 import { CardContent } from '@components/ui/card';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
+
 import { handleCopyText } from '@utils/helpers/copy-text';
-import { usePaymentSummary } from '@/hooks/usePaymentSummary';
-import { useMemo } from 'react';
+
+import { usePaymentSummary } from '@hooks/usePaymentSummary';
 
 interface PaymentAddressProps {
   readonly copied: { [key: string]: boolean };

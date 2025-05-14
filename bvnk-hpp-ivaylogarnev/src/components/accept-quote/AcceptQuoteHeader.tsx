@@ -1,6 +1,8 @@
-import { usePaymentSummary } from '@/hooks/usePaymentSummary';
-import { CardHeader, CardTitle } from '@components/ui/card';
 import { useMemo } from 'react';
+
+import { usePaymentSummary } from '@hooks/usePaymentSummary';
+
+import { CardHeader, CardTitle } from '@components/ui/card';
 
 export const AcceptQuoteHeader = () => {
   const { paymentSummary } = usePaymentSummary();

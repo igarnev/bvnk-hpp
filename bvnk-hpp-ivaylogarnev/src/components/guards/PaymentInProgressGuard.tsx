@@ -1,7 +1,8 @@
-import { usePaymentSummary } from '@/hooks/usePaymentSummary';
-import { uuidSchema } from '@/utils/schemas/zod-schemas';
 import { useEffect, useMemo } from 'react';
 import { useNavigate, useParams, Outlet } from 'react-router-dom';
+
+import { usePaymentSummary } from '@hooks/usePaymentSummary';
+import { uuidSchema } from '@utils/schemas/zod-schemas';
 
 export const PaymentInProgressGuard = () => {
   const { paymentSummary } = usePaymentSummary();

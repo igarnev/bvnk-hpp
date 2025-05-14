@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { Loader2 } from 'lucide-react';
 
 import { formatTime, updateTimerFromExpiryDate } from '@utils/helpers/timer';
-import { Loader2 } from 'lucide-react';
 
 interface CountdownTimerProps {
   readonly expiryDate: number;
