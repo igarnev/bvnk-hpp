@@ -12,6 +12,7 @@ export default defineConfig({
       '@features': '/src/features',
       '@models': '/src/models',
       '@pages': '/src/pages',
+      '@guards': '/src/guards',
       '@lib': '/src/lib',
       '@hooks': '/src/hooks',
       '@styles': '/src/styles',
