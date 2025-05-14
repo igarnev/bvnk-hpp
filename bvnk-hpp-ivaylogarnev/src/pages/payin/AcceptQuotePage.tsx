@@ -23,7 +23,7 @@ import { Separator } from '@components/ui/separator';
 import { formatTime, updateTimerFromExpiryDate } from '@utils/helpers/timer';
 import { currencyOptions } from '@utils/constants';
 
-import { paymentService } from '@/services/paymentService';
+import { paymentService } from '@services/paymentService';
 
 const AcceptQuotePage = () => {
   const { uuid } = useParams<{ uuid: string }>();
@@ -40,13 +40,7 @@ const AcceptQuotePage = () => {
       localStorage.getItem('payInProgressSummary') &&
       JSON.parse(localStorage.getItem('payInProgressSummary')!).uuid === uuid
     ) {
-      navigate(`/payin/${uuid}/pay`, {
-        state: {
-          paymentSummary: JSON.parse(
-            localStorage.getItem('payInProgressSummary')!
-          )
-        }
-      });
+      navigate(`/payin/${uuid}/pay`);
     }
   }, [navigate, uuid]);
 
@@ -77,7 +71,6 @@ const AcceptQuotePage = () => {
       if (data) {
         queryClient.setQueryData(['paymentSummary', uuid], data);
       }
-      queryClient.invalidateQueries({ queryKey: ['paymentSummary', uuid] });
     }
   });
 

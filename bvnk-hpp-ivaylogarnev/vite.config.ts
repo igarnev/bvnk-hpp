@@ -13,6 +13,7 @@ export default defineConfig({
       '@models': '/src/models',
       '@pages': '/src/pages',
       '@lib': '/src/lib',
+      '@hooks': '/src/hooks',
       '@styles': '/src/styles',
       '@services': '/src/services',
       '@utils': '/src/utils'

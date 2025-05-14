@@ -15,7 +15,7 @@ export const App = () => {
       {/* Payment routes */}
       <Route path="/payin/:uuid" element={<AcceptQuotePage />} />
       <Route path="/payin/:uuid/pay" element={<PayQuotePage />} />
-      <Route path="/payin/:uuid/expired" element={<ExpiredPage />} />
+      <Route path="/expired" element={<ExpiredPage />} />
 
       {/* 404 Page */}
       <Route path="*" element={<NotFoundPage />} />

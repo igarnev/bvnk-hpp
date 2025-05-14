@@ -1,8 +1,8 @@
 import axios from 'axios';
 import type {
-  AcceptSummaryRequest,
   PaymentSummary,
-  UpdateSummaryRequest
+  AcceptPaymentSummaryRequest,
+  UpdatePaymentSummaryRequest
 } from '@models/payment';
 
 const API_BASE_URL = 'https://api.sandbox.bvnk.com/api/v1/pay';
@@ -17,7 +17,7 @@ export const paymentService = {
 
   updatePaymentSummary: async (
     uuid: string,
-    data: UpdateSummaryRequest
+    data: UpdatePaymentSummaryRequest
   ): Promise<PaymentSummary> => {
     const response = await axios.put<PaymentSummary>(
       `${API_BASE_URL}/${uuid}/update/summary`,
@@ -28,7 +28,7 @@ export const paymentService = {
 
   acceptPaymentSummary: async (
     uuid: string,
-    data: AcceptSummaryRequest
+    data: AcceptPaymentSummaryRequest
   ): Promise<PaymentSummary> => {
     const response = await axios.put<PaymentSummary>(
       `${API_BASE_URL}/${uuid}/accept/summary`,

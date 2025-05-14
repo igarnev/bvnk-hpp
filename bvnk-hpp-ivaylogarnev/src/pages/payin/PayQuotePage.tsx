@@ -5,8 +5,8 @@ import {
   useNavigate,
   useParams
 } from 'react-router-dom';
-import QRCode from 'react-qr-code';
 import { Loader2 } from 'lucide-react';
+import QRCode from 'react-qr-code';
 
 import {
   Card,
@@ -42,6 +42,10 @@ const PayQuotePage = () => {
         'payInProgressSummary',
         JSON.stringify(location.state.paymentSummary)
       );
+    } else {
+      setPaymentSummary(
+        JSON.parse(localStorage.getItem('payInProgressSummary') || '{}')
+      );
     }
   }, [location.state, uuid, navigate]);
 
@@ -55,12 +59,10 @@ const PayQuotePage = () => {
   // Timer effect
   useEffect(() => {
     if (
-      (new Date(location.state?.paymentSummary?.expiryDate).getTime() <
-        Date.now() &&
-        location.state?.paymentSummary?.expiryDate !== null) ||
-      !location.state?.paymentSummary
+      paymentSummary?.expiryDate &&
+      new Date(paymentSummary.expiryDate).getTime() < Date.now()
     ) {
-      navigate(`/payin/${uuid}/expired`);
+      navigate(`/expired`);
     }
 
     if (timeLeft > 0 && timerRef.current === null) {
@@ -69,8 +71,7 @@ const PayQuotePage = () => {
           if (prevTime <= 1) {
             clearInterval(timerRef.current!);
             timerRef.current = null;
-            navigate(`/payin/${uuid}/expired`);
-            return 0;
+            navigate(`/expired`);
           }
           return prevTime - 1;
         });
@@ -83,7 +84,7 @@ const PayQuotePage = () => {
         timerRef.current = null;
       }
     };
-  }, [timeLeft, navigate, uuid, location.state?.paymentSummary]);
+  }, [timeLeft, navigate, location.state?.paymentSummary, paymentSummary]);
 
   // If the user has no payment in progress, navigate to the accept quote page
   if (
