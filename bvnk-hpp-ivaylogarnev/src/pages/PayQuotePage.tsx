@@ -7,13 +7,13 @@ import { useTimer } from '@hooks/useTimer';
 import type { PaymentSummary } from '@models/payment';
 
 import { Card } from '@components/ui/card';
-import { PayQuoteHeader } from '@components/PayQuoteHeader';
-import { AmountDue } from '@components/AmountDue';
-import { PaymentAddress } from '@components/PaymentAddress';
-import { QrCodeSection } from '@components/QrCodeSection';
-import { PayTimeRemaining } from '@components/PayTimeRemaining';
+import { PayQuoteHeader } from '@components/pay-quote/PayQuoteHeader';
+import { AmountDue } from '@components/pay-quote/AmountDue';
+import { PaymentAddress } from '@components/pay-quote/PaymentAddress';
+import { QrCodeSection } from '@components/pay-quote/QrCodeSection';
+import { PayTimeRemaining } from '@components/pay-quote/PayTimeRemaining';
 
-const PayQuotePage = () => {
+export const PayQuotePage = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const navigate = useNavigate();
 
@@ -71,5 +71,3 @@ const PayQuotePage = () => {
     </div>
   );
 };
-
-export default PayQuotePage;

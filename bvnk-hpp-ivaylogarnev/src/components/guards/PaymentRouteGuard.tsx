@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams, Outlet } from 'react-router-dom';
 
-import { uuidSchema } from '@utils/zod-schemas';
+import { uuidSchema } from '@/utils/schemas/zod-schemas';
 
-const PaymentRouteGuard = () => {
+export const PaymentRouteGuard = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const navigate = useNavigate();
 
@@ -25,5 +25,3 @@ const PaymentRouteGuard = () => {
 
   return <Outlet />;
 };
-
-export default PaymentRouteGuard;

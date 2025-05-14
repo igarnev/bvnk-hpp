@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from '@components/ui/card';
 import { Button } from '@components/ui/button';
 
-const NotFoundPage = () => {
+export const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
@@ -18,5 +18,3 @@ const NotFoundPage = () => {
     </div>
   );
 };
-
-export default NotFoundPage;

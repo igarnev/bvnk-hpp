@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { uuidSchema } from '@utils/zod-schemas';
+import { uuidSchema } from '@utils/schemas/zod-schemas';
 
 export const useUuidValidation = () => {
   const [uuid, setUuid] = useState<string>('');

@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { Card, CardTitle } from '@components/ui/card';
 import { Button } from '@components/ui/button';
-import WarningIcon from '@components/ui/warning-icon';
+import { WarningIcon } from '@components/ui/warning-icon';
 
-export const ErrorState = () => {
+export const ErrorBanner = () => {
   const navigate = useNavigate();
 
   return (

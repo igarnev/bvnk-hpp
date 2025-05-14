@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams, Outlet } from 'react-router-dom';
 
-const PaymentInProgressGuard = () => {
+export const PaymentInProgressGuard = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const navigate = useNavigate();
 
@@ -17,5 +17,3 @@ const PaymentInProgressGuard = () => {
 
   return <Outlet />;
 };
-
-export default PaymentInProgressGuard;

@@ -5,14 +5,14 @@ import { usePaymentSummary } from '@hooks/usePaymentSummary';
 import { useTimer } from '@hooks/useTimer';
 
 import { Card } from '@components/ui/card';
-import { LoadingState } from '@components/LoadingState';
-import { ErrorState } from '@components/ErrorState';
-import { AcceptQuoteHeader } from '@components/AcceptQuoteHeader';
-import { CurrencySelector } from '@components/CurrencySelector';
-import { PaymentDetails } from '@components/PaymentDetails';
-import { ConfirmPaymentButton } from '@components/ConfirmPaymentButton';
+import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { ErrorBanner } from '@components/common/ErrorBanner';
+import { AcceptQuoteHeader } from '@components/accept-quote/AcceptQuoteHeader';
+import { CurrencySelector } from '@components/accept-quote/CurrencySelector';
+import { PaymentDetails } from '@components/accept-quote/PaymentDetails';
+import { ConfirmPaymentButton } from '@components/accept-quote/ConfirmPaymentButton';
 
-const AcceptQuotePage = () => {
+export const AcceptQuotePage = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const [selectedCurrency, setSelectedCurrency] = useState<string>('');
 
@@ -41,11 +41,11 @@ const AcceptQuotePage = () => {
   };
 
   if (isLoading) {
-    return <LoadingState />;
+    return <LoadingSpinner />;
   }
 
   if (error) {
-    return <ErrorState />;
+    return <ErrorBanner />;
   }
 
   return (
@@ -83,5 +83,3 @@ const AcceptQuotePage = () => {
     </div>
   );
 };
-
-export default AcceptQuotePage;

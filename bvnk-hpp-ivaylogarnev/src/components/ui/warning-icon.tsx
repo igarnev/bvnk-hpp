@@ -1,4 +1,4 @@
-const WarningIcon = () => (
+export const WarningIcon = () => (
   <svg
     width="48"
     height="48"
@@ -11,5 +11,3 @@ const WarningIcon = () => (
     <circle cx="12" cy="16" r="1.5" fill="white" />
   </svg>
 );
-
-export default WarningIcon;

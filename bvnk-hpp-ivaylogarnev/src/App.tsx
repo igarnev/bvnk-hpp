@@ -1,13 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
 
-import HomePage from '@pages/HomePage';
-import AcceptQuotePage from '@pages/payin/AcceptQuotePage';
-import PayQuotePage from '@pages/payin/PayQuotePage';
-import ExpiredPage from '@pages/payin/ExpiredPage';
-import NotFoundPage from '@pages/NotFoundPage';
+import { HomePage } from '@pages/HomePage';
+import { AcceptQuotePage } from '@pages/AcceptQuotePage';
+import { PayQuotePage } from '@pages/PayQuotePage';
+import { ExpiredPage } from '@pages/ExpiredPage';
+import { NotFoundPage } from '@pages/NotFoundPage';
 
-import PaymentRouteGuard from '@guards/PaymentRouteGuard';
-import PaymentInProgressGuard from '@guards/PaymentInProgressGuard';
+import { PaymentRouteGuard } from '@components/guards/PaymentRouteGuard';
+import { PaymentInProgressGuard } from '@components/guards/PaymentInProgressGuard';
 
 export const App = () => {
   return (
@@ -31,5 +31,3 @@ export const App = () => {
     </div>
   );
 };
-
-export default App;

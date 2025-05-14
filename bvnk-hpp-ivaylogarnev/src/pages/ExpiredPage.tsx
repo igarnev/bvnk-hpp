@@ -1,7 +1,7 @@
 import { Card, CardDescription, CardTitle } from '@components/ui/card';
-import WarningIcon from '@components/ui/warning-icon';
+import { WarningIcon } from '@components/ui/warning-icon';
 
-const ExpiredPage = () => {
+export const ExpiredPage = () => {
   return (
     <div className="flex justify-center items-center h-screen">
       <Card className="w-1/4 min-w-102 p-16 mb-64 items-center">
@@ -14,5 +14,3 @@ const ExpiredPage = () => {
     </div>
   );
 };
-
-export default ExpiredPage;

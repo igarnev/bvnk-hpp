@@ -2,13 +2,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { Input } from '@components/ui/input';
 import { Card } from '@components/ui/card';
-import { PayButton } from '@components/PayButton';
+import { PayButton } from '@components/home/PayButton';
 
 import { useUuidValidation } from '@hooks/useUuidValidation';
 
-import { uuidSchema } from '@utils/zod-schemas';
+import { uuidSchema } from '@utils/schemas/zod-schemas';
 
-const HomePage = () => {
+export const HomePage = () => {
   const { uuid, error: uuidError, handleUuidChange } = useUuidValidation();
   const navigate = useNavigate();
 
@@ -39,5 +39,3 @@ const HomePage = () => {
     </div>
   );
 };
-
-export default HomePage;

@@ -7,7 +7,7 @@ import {
 } from '@components/ui/select';
 import { CardContent } from '@components/ui/card';
 
-import { currencyOptions } from '@utils/constants';
+import { currencyOptions } from '@/utils/constants/constants';
 
 interface CurrencySelectorProps {
   readonly selectedCurrency: string;
