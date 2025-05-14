@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
   Select,
@@ -28,11 +28,13 @@ import { paymentService } from '@/services/paymentService';
 const AcceptQuotePage = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const navigate = useNavigate();
-  const [selectedCurrency, setSelectedCurrency] = useState<string>('');
-  const [timeLeft, setTimeLeft] = useState<number>(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const queryClient = useQueryClient();
 
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>('');
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+
+  // If the user has a payment in progress, navigate to the pay page
   useEffect(() => {
     if (
       localStorage.getItem('payInProgressSummary') &&
@@ -48,12 +50,14 @@ const AcceptQuotePage = () => {
     }
   }, [navigate, uuid]);
 
-  const { data: paymentSummary } = useQuery({
+  // Get the payment summary
+  const { data: paymentSummary, isLoading } = useQuery({
     queryKey: ['paymentSummary', uuid],
     queryFn: () => paymentService.getPaymentSummary(uuid!),
     enabled: !!uuid
   });
 
+  // Update the payment summary
   const updatePaymentSummary = useMutation({
     mutationFn: async () => {
       if (!uuid || !selectedCurrency) return null;
@@ -69,11 +73,15 @@ const AcceptQuotePage = () => {
 
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.setQueryData(['paymentSummary', uuid], data);
+      }
       queryClient.invalidateQueries({ queryKey: ['paymentSummary', uuid] });
     }
   });
 
+  // Accept the payment summary
   const acceptPaymentData = useMutation({
     mutationFn: async () => {
       const paymentSummary = await paymentService.acceptPaymentSummary(uuid!, {
@@ -125,6 +133,7 @@ const AcceptQuotePage = () => {
   const handleConfirm = async () => {
     acceptPaymentData.mutate();
 
+    // If the payment is accepted, navigate to the pay page
     if (!acceptPaymentData.isPending) {
       navigate(`/payin/${uuid}/pay`, {
         state: {
@@ -134,92 +143,108 @@ const AcceptQuotePage = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <Loader2 className="h-8 w-8 animate-spin text-[#3f53dd]" />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <Card className="w-full max-w-md bg-white mb-64">
-        <CardHeader className="flex flex-col items-center text-center">
-          <CardTitle className="text-lg mb-4">Merchant Display Name</CardTitle>
-          <div className="text-4xl font-bold">
-            {paymentSummary?.displayCurrency.amount ?? 0}{' '}
-            {paymentSummary?.displayCurrency.currency ?? 'N/A'}
-          </div>
-          <div className="mt-4 text-sm text-gray-500">
-            For reference number:{' '}
-            <span className="font-medium">
-              {paymentSummary?.reference ?? 'N/A'}
-            </span>
-          </div>
-        </CardHeader>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen bg-gray-100">
+          <Loader2 className="h-8 w-8 animate-spin text-[#3f53dd]" />
+        </div>
+      }
+    >
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+        <Card className="w-full max-w-md bg-white mb-64">
+          <CardHeader className="flex flex-col items-center text-center">
+            <CardTitle className="text-lg">Merchant Display Name</CardTitle>
+            <div className="text-4xl font-bold">
+              {paymentSummary?.displayCurrency.amount ?? 0}{' '}
+              {paymentSummary?.displayCurrency.currency ?? 'N/A'}
+            </div>
+            <div className="mt-4 text-sm text-gray-500">
+              For reference number:
+              <span className="text-black pl-1">
+                {paymentSummary?.reference ?? 'N/A'}
+              </span>
+            </div>
+          </CardHeader>
 
-        <CardContent>
-          <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">Pay with</label>
-            <Select
-              onValueChange={handleSelectedCurrency}
-              value={selectedCurrency}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Currency" />
-              </SelectTrigger>
-              <SelectContent>
-                {currencyOptions.map(
-                  (currency: { value: string; label: string }) => (
-                    <SelectItem key={currency.value} value={currency.value}>
-                      {currency.label}
-                    </SelectItem>
-                  )
-                )}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-
-        {selectedCurrency && (
-          <div className="flex flex-col">
-            <Separator className="!w-[89%] my-1 bg-gray-200 mx-auto" />
-
-            <CardFooter className="relative justify-between py-2 ">
-              <div className="text-muted-foreground">Amount due:</div>
-              <div>
-                {updatePaymentSummary.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <>
-                    {paymentSummary?.paidCurrency.amount}{' '}
-                    {paymentSummary?.paidCurrency.currency}
-                  </>
-                )}
-              </div>
-            </CardFooter>
-
-            <Separator className="!w-[89%] my-1  bg-gray-200 mx-auto" />
-            <CardFooter className="relative justify-between py-2 ">
-              <div className="text-muted-foreground">
-                Quote price expires in:
-              </div>
-              <div>
-                {updatePaymentSummary.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  formatTime(timeLeft)
-                )}
-              </div>
-            </CardFooter>
-            <Separator className="!w-[89%] my-1 bg-gray-200 mx-auto" />
-
-            <CardFooter className="relative justify-between mt-4">
-              <Button
-                className="w-full"
-                onClick={handleConfirm}
-                disabled={acceptPaymentData.isPending}
+          <CardContent>
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-2">Pay with</label>
+              <Select
+                onValueChange={handleSelectedCurrency}
+                value={selectedCurrency}
               >
-                {!acceptPaymentData.isPending ? 'Confirm' : 'Processing...'}
-              </Button>
-            </CardFooter>
-          </div>
-        )}
-      </Card>
-    </div>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Currency" />
+                </SelectTrigger>
+                <SelectContent>
+                  {currencyOptions.map(
+                    (currency: { value: string; label: string }) => (
+                      <SelectItem key={currency.value} value={currency.value}>
+                        {currency.label}
+                      </SelectItem>
+                    )
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+
+          {selectedCurrency && (
+            <div className="flex flex-col">
+              <Separator className="!w-[89%] my-1 bg-gray-200 mx-auto" />
+
+              <CardFooter className="relative justify-between py-2 ">
+                <div className="text-muted-foreground">Amount due:</div>
+                <div>
+                  {updatePaymentSummary.isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      {paymentSummary?.paidCurrency.amount}{' '}
+                      {paymentSummary?.paidCurrency.currency}
+                    </>
+                  )}
+                </div>
+              </CardFooter>
+
+              <Separator className="!w-[89%] my-1  bg-gray-200 mx-auto" />
+              <CardFooter className="relative justify-between py-2 ">
+                <div className="text-muted-foreground">
+                  Quote price expires in:
+                </div>
+                <div>
+                  {updatePaymentSummary.isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    formatTime(timeLeft)
+                  )}
+                </div>
+              </CardFooter>
+              <Separator className="!w-[89%] my-1 bg-gray-200 mx-auto" />
+
+              <CardFooter className="relative justify-between mt-4">
+                <Button
+                  className="w-full"
+                  onClick={handleConfirm}
+                  disabled={acceptPaymentData.isPending}
+                >
+                  {!acceptPaymentData.isPending ? 'Confirm' : 'Processing...'}
+                </Button>
+              </CardFooter>
+            </div>
+          )}
+        </Card>
+      </div>
+    </Suspense>
   );
 };
 
