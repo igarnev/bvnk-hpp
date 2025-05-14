@@ -1,4 +1,9 @@
-import { useLocation } from 'react-router-dom';
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams
+} from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import QRCode from 'react-qr-code';
 
@@ -16,7 +21,9 @@ import type { PaymentSummary } from '@models/payment';
 import { formatTime, updateTimerFromExpiryDate } from '@utils/helpers/timer';
 
 const PayQuotePage = () => {
+  const { uuid } = useParams<{ uuid: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
   const [paymentSummary, setPaymentSummary] = useState<PaymentSummary | null>(
     null
   );
@@ -26,6 +33,12 @@ const PayQuotePage = () => {
   useEffect(() => {
     if (location.state?.paymentSummary) {
       setPaymentSummary(location.state.paymentSummary);
+      console.log(location.state.paymentSummary);
+
+      localStorage.setItem(
+        'payInProgressSummary',
+        JSON.stringify(location.state.paymentSummary)
+      );
       if (location.state.paymentSummary.expiryDate) {
         updateTimerFromExpiryDate(
           location.state.paymentSummary.expiryDate,
@@ -33,16 +46,20 @@ const PayQuotePage = () => {
         );
       }
     }
-  }, [location.state]);
+  }, [location.state, uuid, navigate]);
 
   // Timer effect
   useEffect(() => {
+    if (!location.state?.paymentSummary) {
+      navigate(`/payin/${uuid}/expired`);
+    }
+
     if (timeLeft <= 0 || timerRef.current !== null) return;
 
     timerRef.current = setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 1) {
-          return 0;
+          navigate(`/payin/${uuid}/expired`);
         }
         return prevTime - 1;
       });
@@ -54,7 +71,14 @@ const PayQuotePage = () => {
         timerRef.current = null;
       }
     };
-  }, [timeLeft, paymentSummary?.acceptanceExpiryDate]);
+  }, [timeLeft, paymentSummary?.acceptanceExpiryDate, navigate, uuid]);
+
+  if (
+    !location.state?.paymentSummary &&
+    JSON.parse(localStorage.getItem('payInProgressSummary')!).uuid !== uuid
+  ) {
+    return <Navigate to={`/payin/${uuid}`} />;
+  }
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">

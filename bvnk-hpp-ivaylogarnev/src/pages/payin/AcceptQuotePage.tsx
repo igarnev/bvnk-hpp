@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
-import { Loader2 } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
 
 import {
   Select,
@@ -22,17 +22,31 @@ import { Separator } from '@components/ui/separator';
 
 import { formatTime, updateTimerFromExpiryDate } from '@utils/helpers/timer';
 import { currencyOptions } from '@utils/constants';
+
 import { paymentService } from '@/services/paymentService';
 
 const AcceptQuotePage = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const navigate = useNavigate();
-
   const [selectedCurrency, setSelectedCurrency] = useState<string>('');
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (
+      localStorage.getItem('payInProgressSummary') &&
+      JSON.parse(localStorage.getItem('payInProgressSummary')!).uuid === uuid
+    ) {
+      navigate(`/payin/${uuid}/pay`, {
+        state: {
+          paymentSummary: JSON.parse(
+            localStorage.getItem('payInProgressSummary')!
+          )
+        }
+      });
+    }
+  }, [navigate, uuid]);
 
   const { data: paymentSummary } = useQuery({
     queryKey: ['paymentSummary', uuid],
@@ -57,6 +71,23 @@ const AcceptQuotePage = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['paymentSummary', uuid] });
+    }
+  });
+
+  const acceptPaymentData = useMutation({
+    mutationFn: async () => {
+      const paymentSummary = await paymentService.acceptPaymentSummary(uuid!, {
+        successUrl: 'no_url_needed'
+      });
+
+      return paymentSummary;
+    },
+    onSuccess: (paymentSummary) => {
+      navigate(`/payin/${uuid}/pay`, {
+        state: {
+          paymentSummary
+        }
+      });
     }
   });
 
@@ -92,14 +123,12 @@ const AcceptQuotePage = () => {
   };
 
   const handleConfirm = async () => {
-    const data = await paymentService.acceptPaymentSummary(uuid!, {
-      successUrl: 'no_url_needed'
-    });
+    acceptPaymentData.mutate();
 
-    if (data) {
+    if (!acceptPaymentData.isPending) {
       navigate(`/payin/${uuid}/pay`, {
         state: {
-          paymentSummary: data
+          paymentSummary
         }
       });
     }
@@ -107,7 +136,7 @@ const AcceptQuotePage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <Card className="w-full max-w-md bg-white">
+      <Card className="w-full max-w-md bg-white mb-64">
         <CardHeader className="flex flex-col items-center text-center">
           <CardTitle className="text-lg mb-4">Merchant Display Name</CardTitle>
           <div className="text-4xl font-bold">
@@ -179,8 +208,12 @@ const AcceptQuotePage = () => {
             <Separator className="!w-[89%] my-1 bg-gray-200 mx-auto" />
 
             <CardFooter className="relative justify-between mt-4">
-              <Button className="w-full" onClick={handleConfirm}>
-                Confirm
+              <Button
+                className="w-full"
+                onClick={handleConfirm}
+                disabled={acceptPaymentData.isPending}
+              >
+                {!acceptPaymentData.isPending ? 'Confirm' : 'Processing...'}
               </Button>
             </CardFooter>
           </div>

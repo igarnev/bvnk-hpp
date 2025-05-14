@@ -1,13 +1,16 @@
-import { useParams } from 'react-router-dom';
+import { Card, CardDescription, CardTitle } from '@components/ui/card';
+import WarningIcon from '@components/ui/warning-icon';
 
 const ExpiredPage = () => {
-  const { uuid } = useParams<{ uuid: string }>();
-
   return (
-    <div>
-      <h1>Quote Expired</h1>
-      <p>The quote with UUID: {uuid} has expired.</p>
-      {/* Expiry details will be implemented here */}
+    <div className="flex justify-center items-center h-screen">
+      <Card className="w-1/4 min-w-102 p-16 mb-64 items-center">
+        <WarningIcon />
+        <CardTitle className="text-center">Payment details expired</CardTitle>
+        <CardDescription className="text-center">
+          The payment details for your transaction have expired.
+        </CardDescription>
+      </Card>
     </div>
   );
 };
