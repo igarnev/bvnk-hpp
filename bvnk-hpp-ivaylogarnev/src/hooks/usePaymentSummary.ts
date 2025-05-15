@@ -3,8 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 
 import { paymentService } from '@services/paymentService';
 
+import type { TUuid } from '@models/TUuid';
+
 export const usePaymentSummary = () => {
-  const { uuid } = useParams<{ uuid: string }>() as { uuid: string };
+  const { uuid } = useParams<TUuid>() as TUuid;
+
   const {
     data: paymentSummary,
     isLoading,

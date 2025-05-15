@@ -8,11 +8,7 @@ export const formatTime = (seconds: number): string => {
     .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 };
 
-// Helper function to update timer from expiry date
-export const updateTimerFromExpiryDate = (
-  expiryDate: number,
-  setTimeLeft: (time: number) => void
-) => {
+export const getRemainingTime = (expiryDate: number): number => {
   const expiryTime = new Date(expiryDate).getTime();
   const currentTime = new Date().getTime();
   const remainingTime = Math.max(
@@ -20,5 +16,5 @@ export const updateTimerFromExpiryDate = (
     Math.floor((expiryTime - currentTime) / 1000)
   );
 
-  setTimeLeft(remainingTime);
+  return remainingTime;
 };

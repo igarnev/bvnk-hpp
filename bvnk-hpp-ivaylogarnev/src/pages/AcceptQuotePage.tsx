@@ -4,19 +4,19 @@ import { usePaymentSummary } from '@hooks/usePaymentSummary';
 import { useUpdatePaymentSummary } from '@hooks/useUpdatePaymentSummary';
 
 import { Card } from '@components/ui/card';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { LoadingSpinner } from '@components/common/LoadingSpinner';
 import { ErrorBanner } from '@components/common/ErrorBanner';
 import { AcceptQuoteHeader } from '@components/accept-quote/AcceptQuoteHeader';
-import { CurrencySelector } from '@components/accept-quote/CurrencySelector';
-import { PaymentDetails } from '@components/accept-quote/PaymentDetails';
-import { ConfirmPaymentButton } from '@components/accept-quote/ConfirmPaymentButton';
+import { AcceptQuoteCurrencySelector } from '@components/accept-quote/AcceptQuoteCurrencySelector';
+import { AcceptQuotePaymentDetails } from '@components/accept-quote/AcceptQuotePaymentDetails';
+import { AcceptQuoteConfirmPaymentButton } from '@components/accept-quote/AcceptQuoteConfirmPaymentButton';
 
 export const AcceptQuotePage = () => {
-  const [selectedCurrency, setSelectedCurrency] = useState<string>('');
+  const [selectedCurrency, setSelectedCurrency] = useState('');
   const { isLoading, error } = usePaymentSummary();
   const { updatePaymentSummary } = useUpdatePaymentSummary();
 
-  const handleSelectedCurrency = (value: string) => {
+  const handleCurrencyChange = (value: string) => {
     setSelectedCurrency(value);
     updatePaymentSummary.mutate({ currency: value });
   };
@@ -30,22 +30,25 @@ export const AcceptQuotePage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <Card className="w-full max-w-md mb-64">
+    <div className="flex flex-col items-center justify-center">
+      <Card className="w-full max-w-md">
         <AcceptQuoteHeader />
 
-        <CurrencySelector
+        <AcceptQuoteCurrencySelector
           selectedCurrency={selectedCurrency}
-          onCurrencyChange={handleSelectedCurrency}
+          onCurrencyChange={handleCurrencyChange}
         />
 
         {selectedCurrency && (
-          <PaymentDetails
+          <AcceptQuotePaymentDetails
             currency={selectedCurrency}
             updatePaymentSummary={updatePaymentSummary}
           />
         )}
-        <ConfirmPaymentButton />
+        <AcceptQuoteConfirmPaymentButton
+          currency={selectedCurrency}
+          isUpdatePaymentPending={updatePaymentSummary.isPending}
+        />
       </Card>
     </div>
   );

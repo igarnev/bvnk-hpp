@@ -3,8 +3,8 @@ import { WarningIcon } from '@components/ui/warning-icon';
 
 export const ExpiredPage = () => {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <Card className="w-1/4 min-w-102 p-16 mb-64 items-center">
+    <div className="flex justify-center items-center">
+      <Card className="w-1/4 min-w-102 p-16 items-center">
         <WarningIcon />
         <CardTitle className="text-center">Payment details expired</CardTitle>
         <CardDescription className="text-center">

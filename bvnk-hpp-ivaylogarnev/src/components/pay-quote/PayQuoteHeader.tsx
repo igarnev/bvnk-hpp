@@ -1,14 +1,14 @@
 import { CardHeader, CardTitle } from '@components/ui/card';
 
-interface PayQuoteHeaderProps {
+type TPayQuoteHeaderProps = {
   readonly currency: string;
-}
+};
 
-export const PayQuoteHeader = ({ currency }: PayQuoteHeaderProps) => {
+export const PayQuoteHeader = ({ currency }: TPayQuoteHeaderProps) => {
   return (
     <CardHeader className="flex flex-col items-center text-center">
       <CardTitle className="text-lg mb-4">Pay with {currency}</CardTitle>
-      <div className="text-sm max-w-2xs text-gray-500">
+      <div className="text-sm max-w-2xs mb-4 text-gray-500">
         To complete this payment send the amount due to the {currency} address
         provided below.
       </div>

@@ -2,16 +2,22 @@ import { useEffect, useMemo } from 'react';
 import { useNavigate, useParams, Outlet } from 'react-router-dom';
 
 import { usePaymentSummary } from '@hooks/usePaymentSummary';
-import { uuidSchema } from '@utils/schemas/zod-schemas';
+
+import { ROUTES } from '@utils/constants-routes';
+import { uuidSchema } from '@utils/schemas-zod';
+
+import { EQuoteStatus } from '@models/EQuoteStatus';
+import type { TUuid } from '@models/TUuid';
+import { EStatus } from '@models/EStatus';
 
 export const PaymentInProgressGuard = () => {
-  const { paymentSummary } = usePaymentSummary();
-  const { uuid } = useParams<{ uuid: string }>();
+  const { uuid } = useParams<TUuid>() as TUuid;
   const navigate = useNavigate();
+  const { paymentSummary } = usePaymentSummary();
 
-  const isExpired = useMemo(() => {
+  const isPaymentExpired = useMemo(() => {
     return (
-      paymentSummary?.status === 'EXPIRED' ||
+      paymentSummary?.status === EStatus.EXPIRED ||
       (paymentSummary?.acceptanceExpiryDate &&
         new Date(paymentSummary.acceptanceExpiryDate).getTime() <
           new Date().getTime())
@@ -19,22 +25,25 @@ export const PaymentInProgressGuard = () => {
   }, [paymentSummary?.acceptanceExpiryDate, paymentSummary?.status]);
 
   useEffect(() => {
+    if (isPaymentExpired) {
+      navigate(ROUTES.PAYMENT_EXPIRED);
+    }
+  }, [navigate, isPaymentExpired]);
+
+  useEffect(() => {
     // Validate UUID first
     const uuidValidation = uuidSchema.uuid.safeParse(uuid);
     if (!uuidValidation.success) {
-      navigate('/not-found');
+      navigate(ROUTES.NOT_FOUND);
       return;
     }
+  }, [navigate, uuid]);
 
-    if (isExpired) {
-      navigate('/expired');
-      return;
+  useEffect(() => {
+    if (paymentSummary?.quoteStatus === EQuoteStatus.ACCEPTED) {
+      navigate(ROUTES.PAYMENT_PAY.replace(':uuid', uuid));
     }
-
-    if (paymentSummary?.quoteStatus === 'ACCEPTED') {
-      navigate(`/payin/${uuid}/pay`);
-    }
-  }, [navigate, uuid, paymentSummary?.quoteStatus, isExpired]);
+  }, [navigate, uuid, paymentSummary?.quoteStatus]);
 
   return <Outlet />;
 };

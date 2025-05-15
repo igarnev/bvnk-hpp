@@ -7,17 +7,17 @@ import {
 } from '@components/ui/select';
 import { CardContent } from '@components/ui/card';
 
-import { currencyOptions } from '@/utils/constants/constants';
+import { CURRENCY_OPTIONS } from '@utils/constants-currency';
 
-interface CurrencySelectorProps {
+type TAcceptQuoteCurrencySelectorProps = {
   readonly selectedCurrency: string;
   readonly onCurrencyChange: (value: string) => void;
-}
+};
 
-export const CurrencySelector = ({
+export const AcceptQuoteCurrencySelector = ({
   selectedCurrency,
   onCurrencyChange
-}: CurrencySelectorProps) => {
+}: TAcceptQuoteCurrencySelectorProps) => {
   return (
     <CardContent>
       <div className="mt-4">
@@ -27,13 +27,11 @@ export const CurrencySelector = ({
             <SelectValue placeholder="Select Currency" />
           </SelectTrigger>
           <SelectContent>
-            {currencyOptions.map(
-              (currency: { value: string; label: string }) => (
-                <SelectItem key={currency.value} value={currency.value}>
-                  {currency.label}
-                </SelectItem>
-              )
-            )}
+            {CURRENCY_OPTIONS.map((currency) => (
+              <SelectItem key={currency.value} value={currency.value}>
+                {currency.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

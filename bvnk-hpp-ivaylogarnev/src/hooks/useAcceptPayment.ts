@@ -1,11 +1,17 @@
+import type { AxiosError } from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
 import { paymentService } from '@services/paymentService';
 
+import { handlePaymentError } from '@utils/helpers/error-payment';
+import { ROUTES } from '@utils/constants-routes';
+
+import type { TUuid } from '@models/TUuid';
+
 export const useAcceptPayment = () => {
   const navigate = useNavigate();
-  const { uuid } = useParams<{ uuid: string }>() as { uuid: string };
+  const { uuid } = useParams<TUuid>() as TUuid;
 
   const acceptPayment = useMutation({
     mutationFn: async () => {
@@ -13,11 +19,12 @@ export const useAcceptPayment = () => {
         successUrl: 'no_url_needed'
       });
     },
-    onSuccess: (paymentSummary) => {
-      if (paymentSummary) {
-        navigate(`/payin/${uuid}/pay`);
+    onSuccess: (data) => {
+      if (data) {
+        navigate(ROUTES.PAYMENT_PAY.replace(':uuid', uuid));
       }
-    }
+    },
+    onError: (error: AxiosError) => handlePaymentError(error, navigate)
   });
 
   return {

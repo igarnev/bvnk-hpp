@@ -4,12 +4,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { paymentService } from '@services/paymentService';
 
-import type { ServerError } from '@models/error';
+import { handlePaymentError } from '@utils/helpers/error-payment';
 
+import type { TUuid } from '@models/TUuid';
 export const useUpdatePaymentSummary = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { uuid } = useParams<{ uuid: string }>() as { uuid: string };
+  const { uuid } = useParams<TUuid>() as TUuid;
 
   const updatePaymentSummary = useMutation({
     mutationKey: ['updatePaymentSummary'],
@@ -24,12 +25,7 @@ export const useUpdatePaymentSummary = () => {
         queryClient.setQueryData(['paymentSummary', uuid], data);
       }
     },
-    onError: (error: AxiosError) => {
-      const errorData = error.response?.data as ServerError;
-      if (errorData?.code === 'MER-PAY-2017') {
-        navigate('/expired');
-      }
-    },
+    onError: (error: AxiosError) => handlePaymentError(error, navigate),
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
   });
