@@ -7,6 +7,7 @@ import { paymentService } from '@services/paymentService';
 import { handlePaymentError } from '@utils/helpers/error-payment';
 
 import type { TUuid } from '@models/TUuid';
+import type { IServerError } from '@/models/IServerError';
 export const useUpdatePaymentSummary = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -25,7 +26,8 @@ export const useUpdatePaymentSummary = () => {
         queryClient.setQueryData(['paymentSummary', uuid], data);
       }
     },
-    onError: (error: AxiosError) => handlePaymentError(error, navigate),
+    onError: (error: AxiosError<IServerError>) =>
+      handlePaymentError(error, navigate),
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
   });

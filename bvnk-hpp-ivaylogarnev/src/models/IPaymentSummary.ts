@@ -1,6 +1,6 @@
 import type { EQuoteStatus } from './EQuoteStatus';
 import type { Address } from './IAddress';
-import type { ExchangeRate } from './IEchangeRate';
+import type { ExchangeRate } from './IExchangeRate';
 import type { ICurrency } from './ICurrency';
 import type { EStatus } from './EStatus';
 

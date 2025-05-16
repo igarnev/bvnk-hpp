@@ -7,7 +7,7 @@ import {
 } from '@components/ui/select';
 import { CardContent } from '@components/ui/card';
 
-import { CURRENCY_OPTIONS } from '@utils/constants-currency';
+import { CURRENCY_OPTIONS } from '@utils/constants';
 
 type TAcceptQuoteCurrencySelectorProps = {
   readonly selectedCurrency: string;

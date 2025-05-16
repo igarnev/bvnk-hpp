@@ -8,7 +8,7 @@ import {
   TooltipTrigger
 } from '@components/ui/tooltip';
 
-import { ROUTES } from '@utils/constants-routes';
+import { ROUTES } from '@utils/constants';
 import { uuidSchema } from '@utils/schemas-zod';
 
 type THomePayButtonProps = {

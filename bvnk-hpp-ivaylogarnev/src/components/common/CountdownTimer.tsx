@@ -32,10 +32,7 @@ export const CountdownTimer = ({
     timerRef.current = setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 1) {
-          // This is to ensure that the onExpire function is called after the timer has expired
-          setTimeout(() => {
-            onExpire();
-          }, 0);
+          onExpire();
           return 0;
         }
         return prevTime - 1;

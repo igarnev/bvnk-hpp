@@ -5,9 +5,10 @@ import { useMutation } from '@tanstack/react-query';
 import { paymentService } from '@services/paymentService';
 
 import { handlePaymentError } from '@utils/helpers/error-payment';
-import { ROUTES } from '@utils/constants-routes';
+import { ROUTES } from '@utils/constants';
 
 import type { TUuid } from '@models/TUuid';
+import type { IServerError } from '@models/IServerError';
 
 export const useAcceptPayment = () => {
   const navigate = useNavigate();
@@ -24,7 +25,8 @@ export const useAcceptPayment = () => {
         navigate(ROUTES.PAYMENT_PAY.replace(':uuid', uuid));
       }
     },
-    onError: (error: AxiosError) => handlePaymentError(error, navigate)
+    onError: (error: AxiosError<IServerError>) =>
+      handlePaymentError(error, navigate)
   });
 
   return {

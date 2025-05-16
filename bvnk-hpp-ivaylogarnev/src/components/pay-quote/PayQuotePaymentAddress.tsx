@@ -2,7 +2,7 @@ import { twJoin } from 'tailwind-merge';
 
 import { CardContent } from '@components/ui/card';
 import { Button } from '@components/ui/button';
-import { CardSectionDivider } from '@components/common/CardSectionDivider';
+import { CardSectionDivider } from '@/components/common/CardSectionDivider';
 
 import { usePaymentSummary } from '@hooks/usePaymentSummary';
 import { useCopyToClipboard } from '@hooks/useCopyToClipboard';

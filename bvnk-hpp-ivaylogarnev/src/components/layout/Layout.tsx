@@ -9,7 +9,7 @@ import { NotFoundPage } from '@pages/NotFoundPage';
 import { PaymentInProgressGuard } from '@components/guards/PaymentInProgressGuard';
 import { Header } from '@components/layout/Header';
 
-import { ROUTES } from '@utils/constants-routes';
+import { ROUTES } from '@utils/constants';
 
 export const Layout = () => {
   return (

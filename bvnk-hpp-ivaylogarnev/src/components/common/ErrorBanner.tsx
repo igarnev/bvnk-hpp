@@ -4,7 +4,7 @@ import { Card, CardTitle } from '@components/ui/card';
 import { Button } from '@components/ui/button';
 import { WarningIcon } from '@components/ui/warning-icon';
 
-import { ROUTES } from '@utils/constants-routes';
+import { ROUTES } from '@utils/constants';
 
 export const ErrorBanner = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { ROUTES } from '@utils/constants-routes';
+import { ROUTES } from '@utils/constants';
 
 import { usePaymentSummary } from '@/hooks/usePaymentSummary';
 import { CardFooter } from '@components/ui/card';
@@ -13,8 +13,11 @@ export const PayQuoteTimeRemaining = () => {
 
   const expiryDate = paymentSummary?.expiryDate;
 
-  const handleOnExpire = () =>
-    navigate(ROUTES.PAYMENT_EXPIRED, { replace: true });
+  const handleOnExpire = () => {
+    setTimeout(() => {
+      navigate(ROUTES.PAYMENT_EXPIRED, { replace: true });
+    }, 1000);
+  };
 
   return (
     <>

@@ -3,7 +3,7 @@ import { useNavigate, useParams, Outlet } from 'react-router-dom';
 
 import { usePaymentSummary } from '@hooks/usePaymentSummary';
 
-import { ROUTES } from '@utils/constants-routes';
+import { ROUTES } from '@utils/constants';
 import { uuidSchema } from '@utils/schemas-zod';
 
 import { EQuoteStatus } from '@models/EQuoteStatus';
