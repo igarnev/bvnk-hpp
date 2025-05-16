@@ -6,7 +6,7 @@ import { PayQuotePage } from '@pages/PayQuotePage';
 import { ExpiredPage } from '@pages/ExpiredPage';
 import { NotFoundPage } from '@pages/NotFoundPage';
 
-import { PaymentInProgressGuard } from '@components/guards/PaymentInProgressGuard';
+import { PaymentGuard } from '@components/guards/PaymentGuard';
 import { Header } from '@components/layout/Header';
 
 import { ROUTES } from '@utils/constants';
@@ -19,7 +19,7 @@ export const Layout = () => {
         <Routes>
           <Route path={ROUTES.HOME} element={<HomePage />} />
 
-          <Route element={<PaymentInProgressGuard />}>
+          <Route element={<PaymentGuard />}>
             <Route
               path={ROUTES.PAYMENT_SUMMARY}
               element={<AcceptQuotePage />}

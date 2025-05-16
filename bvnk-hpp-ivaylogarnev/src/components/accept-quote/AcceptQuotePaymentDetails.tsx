@@ -36,11 +36,17 @@ export const AcceptQuotePaymentDetails = ({
     <div className="flex flex-col">
       <CardSectionDivider />
 
-      <CardFooter className="relative justify-between py-2">
+      <CardFooter
+        className="relative justify-between py-2"
+        data-testid="amount-due-footer"
+      >
         <div className="text-muted-foreground font-light">Amount due:</div>
         <div>
           {updatePaymentSummary.isPending ? (
-            <Loader2 className="h-4 w-4 animate-spin text-primary" />
+            <Loader2
+              className="h-4 w-4 animate-spin text-primary"
+              data-testid="loader"
+            />
           ) : (
             <>
               {paymentSummary?.paidCurrency.amount} {currency}
@@ -51,7 +57,10 @@ export const AcceptQuotePaymentDetails = ({
 
       <CardSectionDivider />
 
-      <CardFooter className="relative justify-between py-2">
+      <CardFooter
+        className="relative justify-between py-2"
+        data-testid="quote-expiry-footer"
+      >
         <div className="text-muted-foreground font-light">
           Quote price expires in:
         </div>

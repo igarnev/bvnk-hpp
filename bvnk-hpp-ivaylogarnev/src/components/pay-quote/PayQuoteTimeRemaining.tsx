@@ -16,7 +16,7 @@ export const PayQuoteTimeRemaining = () => {
   const handleOnExpire = () => {
     setTimeout(() => {
       navigate(ROUTES.PAYMENT_EXPIRED, { replace: true });
-    }, 1000);
+    }, 500);
   };
 
   return (

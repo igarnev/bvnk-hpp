@@ -10,7 +10,7 @@ import { EQuoteStatus } from '@models/EQuoteStatus';
 import type { TUuid } from '@models/TUuid';
 import { EStatus } from '@models/EStatus';
 
-export const PaymentInProgressGuard = () => {
+export const PaymentGuard = () => {
   const { uuid } = useParams<TUuid>() as TUuid;
   const navigate = useNavigate();
   const { paymentSummary } = usePaymentSummary();

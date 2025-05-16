@@ -12,7 +12,7 @@ export const PayQuotePage = () => {
   const { paymentSummary } = usePaymentSummary();
 
   const address = paymentSummary?.address?.address;
-  const currency = paymentSummary?.paidCurrency.currency;
+  const currency = paymentSummary?.paidCurrency?.currency;
 
   if (!address) {
     return <LoadingSpinner />;
@@ -31,7 +31,7 @@ export const PayQuotePage = () => {
           <PayQuoteQrCodeSection
             address={address}
             currency={currency}
-            amount={paymentSummary?.paidCurrency.amount.toString()}
+            amount={paymentSummary?.paidCurrency?.amount.toString()}
           />
 
           <PayQuoteTimeRemaining />

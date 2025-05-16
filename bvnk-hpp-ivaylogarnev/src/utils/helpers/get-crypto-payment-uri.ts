@@ -3,7 +3,9 @@ export const getCryptoPaymentUri = (
   address: string,
   amount: string
 ): string => {
-  switch (currency) {
+  const upperCurrency = currency.toUpperCase();
+
+  switch (upperCurrency) {
     case 'BTC':
       return `bitcoin:${address}?amount=${amount}`;
     case 'LTC':

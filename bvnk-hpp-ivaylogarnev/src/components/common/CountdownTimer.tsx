@@ -50,7 +50,10 @@ export const CountdownTimer = ({
   return (
     <div>
       {isLoading ? (
-        <Loader2 className="h-4 w-4 animate-spin  text-primary" />
+        <Loader2
+          data-testid="loader"
+          className="h-4 w-4 animate-spin text-primary"
+        />
       ) : (
         formatTime(timeLeft)
       )}
