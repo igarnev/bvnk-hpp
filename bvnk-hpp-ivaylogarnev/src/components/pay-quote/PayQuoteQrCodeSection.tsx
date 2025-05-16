@@ -24,7 +24,9 @@ export const PayQuoteQrCodeSection = ({
         />
       </CardContent>
       <CardContent className="flex justify-center mb-1">
-        <span className="text-muted-foreground text-xs">{address}</span>
+        <span className="text-muted-foreground font-light text-xs">
+          {address}
+        </span>
       </CardContent>
     </>
   );

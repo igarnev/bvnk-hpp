@@ -2,13 +2,13 @@ import { Loader2 } from 'lucide-react';
 import type { AxiosError } from 'axios';
 import type { UseMutationResult } from '@tanstack/react-query';
 
-import { CardFooter } from '@components/ui/card';
-import { Separator } from '@components/ui/separator';
-import { CountdownTimer } from '@components/common/CountdownTimer';
-
 import { usePaymentSummary } from '@hooks/usePaymentSummary';
 
 import type { IPaymentSummary } from '@models/IPaymentSummary';
+
+import { CardFooter } from '@components/ui/card';
+import { CountdownTimer } from '@components/common/CountdownTimer';
+import { CardSectionDivider } from '@/components/common/CardSectionDivider';
 
 type TAcceptQuotePaymentDetailsProps = {
   readonly currency: string;
@@ -34,15 +34,13 @@ export const AcceptQuotePaymentDetails = ({
 
   return (
     <div className="flex flex-col">
-      <div className="px-6">
-        <Separator className=" bg-gray-200" />
-      </div>
+      <CardSectionDivider />
 
       <CardFooter className="relative justify-between py-2">
-        <div className="text-muted-foreground">Amount due:</div>
+        <div className="text-muted-foreground font-light">Amount due:</div>
         <div>
           {updatePaymentSummary.isPending ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="h-4 w-4 animate-spin text-primary" />
           ) : (
             <>
               {paymentSummary?.paidCurrency.amount} {currency}
@@ -51,22 +49,21 @@ export const AcceptQuotePaymentDetails = ({
         </div>
       </CardFooter>
 
-      <div className="px-6">
-        <Separator className=" bg-gray-200" />
-      </div>
+      <CardSectionDivider />
 
       <CardFooter className="relative justify-between py-2">
-        <div className="text-muted-foreground">Quote price expires in:</div>
+        <div className="text-muted-foreground font-light">
+          Quote price expires in:
+        </div>
+
         <CountdownTimer
-          expiryDate={acceptanceExpiryDate ?? 0}
           onExpire={handleExpire}
+          expiryDate={acceptanceExpiryDate ?? 0}
           isLoading={updatePaymentSummary.isPending}
         />
       </CardFooter>
 
-      <div className="px-6">
-        <Separator className="my-1 bg-gray-200" />
-      </div>
+      <CardSectionDivider />
     </div>
   );
 };

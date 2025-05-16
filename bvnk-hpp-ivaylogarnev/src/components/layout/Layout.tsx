@@ -26,8 +26,8 @@ export const Layout = () => {
             />
             <Route path={ROUTES.PAYMENT_PAY} element={<PayQuotePage />} />
           </Route>
-          <Route path={ROUTES.PAYMENT_EXPIRED} element={<ExpiredPage />} />
 
+          <Route path={ROUTES.PAYMENT_EXPIRED} element={<ExpiredPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

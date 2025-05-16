@@ -24,26 +24,27 @@ export const PaymentInProgressGuard = () => {
     );
   }, [paymentSummary?.acceptanceExpiryDate, paymentSummary?.status]);
 
+  // Navigate to the not found page if the UUID is invalid
   useEffect(() => {
-    if (isPaymentExpired) {
-      navigate(ROUTES.PAYMENT_EXPIRED);
-    }
-  }, [navigate, isPaymentExpired]);
-
-  useEffect(() => {
-    // Validate UUID first
     const uuidValidation = uuidSchema.uuid.safeParse(uuid);
     if (!uuidValidation.success) {
-      navigate(ROUTES.NOT_FOUND);
-      return;
+      navigate(ROUTES.NOT_FOUND, { replace: true });
     }
   }, [navigate, uuid]);
 
+  // Navigate to the payment page if the quote is accepted and you are trying to access other pages
   useEffect(() => {
     if (paymentSummary?.quoteStatus === EQuoteStatus.ACCEPTED) {
       navigate(ROUTES.PAYMENT_PAY.replace(':uuid', uuid));
     }
   }, [navigate, uuid, paymentSummary?.quoteStatus]);
+
+  // Navigate to the payment expired page if the payment is expired
+  useEffect(() => {
+    if (isPaymentExpired) {
+      navigate(ROUTES.PAYMENT_EXPIRED, { replace: true });
+    }
+  }, [navigate, isPaymentExpired]);
 
   return <Outlet />;
 };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const useCopyToClipboard = () => {
   const [copiedText, setCopiedText] = useState('');
@@ -6,11 +6,19 @@ export const useCopyToClipboard = () => {
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedText(text);
+  };
 
-    setTimeout(() => {
+  useEffect(() => {
+    if (!copiedText) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
       setCopiedText('');
     }, 1000);
-  };
+
+    return () => clearTimeout(timeoutId);
+  }, [copiedText]);
 
   return { copiedText, handleCopyToClipboard };
 };

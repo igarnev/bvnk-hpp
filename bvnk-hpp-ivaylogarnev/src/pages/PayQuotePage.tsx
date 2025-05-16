@@ -1,4 +1,4 @@
-import { Loader2 } from 'lucide-react';
+import { usePaymentSummary } from '@hooks/usePaymentSummary';
 
 import { Card } from '@components/ui/card';
 import { PayQuoteHeader } from '@components/pay-quote/PayQuoteHeader';
@@ -6,8 +6,7 @@ import { PayQuoteAmountDue } from '@components/pay-quote/PayQuoteAmountDue';
 import { PayQuoteQrCodeSection } from '@components/pay-quote/PayQuoteQrCodeSection';
 import { PayQuoteTimeRemaining } from '@components/pay-quote/PayQuoteTimeRemaining';
 import { PayQuotePaymentAddress } from '@components/pay-quote/PayQuotePaymentAddress';
-
-import { usePaymentSummary } from '@hooks/usePaymentSummary';
+import { LoadingSpinner } from '@components/common/LoadingSpinner';
 
 export const PayQuotePage = () => {
   const { paymentSummary } = usePaymentSummary();
@@ -16,11 +15,7 @@ export const PayQuotePage = () => {
   const currency = paymentSummary?.paidCurrency.currency;
 
   if (!address) {
-    return (
-      <div className="flex items-center justify-center bg-gray-100">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   return (

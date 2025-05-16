@@ -1,35 +1,34 @@
 import { useNavigate } from 'react-router-dom';
 
+import { ROUTES } from '@utils/constants-routes';
+
 import { usePaymentSummary } from '@/hooks/usePaymentSummary';
 import { CardFooter } from '@components/ui/card';
-import { Separator } from '@components/ui/separator';
 import { CountdownTimer } from '@components/common/CountdownTimer';
-
-import { ROUTES } from '@utils/constants-routes';
+import { CardSectionDivider } from '@components/common/CardSectionDivider';
 
 export const PayQuoteTimeRemaining = () => {
   const navigate = useNavigate();
   const { paymentSummary } = usePaymentSummary();
 
   const expiryDate = paymentSummary?.expiryDate;
-  const handleOnExpire = () => navigate(ROUTES.PAYMENT_EXPIRED);
+
+  const handleOnExpire = () =>
+    navigate(ROUTES.PAYMENT_EXPIRED, { replace: true });
 
   return (
     <>
-      <div className="px-6">
-        <Separator className=" bg-gray-200" />
-      </div>
+      <CardSectionDivider />
 
       <CardFooter className="relative justify-between">
-        <div className="text-muted-foreground">Time left to pay:</div>
-        {expiryDate && (
-          <CountdownTimer expiryDate={expiryDate} onExpire={handleOnExpire} />
-        )}
+        <div className="text-muted-foreground font-light">Time left to pay</div>
+        <CountdownTimer
+          expiryDate={expiryDate ?? 0}
+          onExpire={handleOnExpire}
+        />
       </CardFooter>
 
-      <div className="px-6">
-        <Separator className=" bg-gray-200" />
-      </div>
+      <CardSectionDivider />
     </>
   );
 };

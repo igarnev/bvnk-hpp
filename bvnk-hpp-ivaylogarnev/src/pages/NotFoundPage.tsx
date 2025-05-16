@@ -8,7 +8,7 @@ import { ROUTES } from '@utils/constants-routes';
 export const NotFoundPage = () => {
   const navigate = useNavigate();
 
-  const handleOnExpire = () => navigate(ROUTES.HOME);
+  const handleGoBack = () => navigate(ROUTES.HOME, { replace: true });
 
   return (
     <div className="flex justify-center items-center">
@@ -17,7 +17,7 @@ export const NotFoundPage = () => {
         <p className="text-center">
           The page you are looking for does not exist.
         </p>
-        <Button onClick={handleOnExpire}>Go back to home</Button>
+        <Button onClick={handleGoBack}>Go back to home</Button>
       </Card>
     </div>
   );

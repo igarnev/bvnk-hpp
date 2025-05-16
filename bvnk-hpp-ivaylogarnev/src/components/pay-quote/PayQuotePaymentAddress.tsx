@@ -2,7 +2,7 @@ import { twJoin } from 'tailwind-merge';
 
 import { CardContent } from '@components/ui/card';
 import { Button } from '@components/ui/button';
-import { Separator } from '@components/ui/separator';
+import { CardSectionDivider } from '@components/common/CardSectionDivider';
 
 import { usePaymentSummary } from '@hooks/usePaymentSummary';
 import { useCopyToClipboard } from '@hooks/useCopyToClipboard';
@@ -13,14 +13,18 @@ export const PayQuotePaymentAddress = () => {
 
   const address = paymentSummary?.address?.address;
 
+  const handleCopyAddress = () => {
+    if (address) {
+      handleCopyToClipboard(address);
+    }
+  };
+
   return (
     <>
-      <div className="px-6">
-        <Separator className="bg-gray-200" />
-      </div>
+      <CardSectionDivider />
 
       <CardContent className="flex justify-between">
-        <div className="text-muted-foreground">
+        <div className="text-muted-foreground font-light">
           {paymentSummary?.paidCurrency.currency} address:
         </div>
         <div
@@ -33,18 +37,16 @@ export const PayQuotePaymentAddress = () => {
             {address?.slice(0, 7)}...{address?.slice(-5)}
           </div>
 
-          {address && (
-            <Button
-              variant="link"
-              className={twJoin(
-                'cursor-pointer p-2',
-                copiedText && 'text-secondary'
-              )}
-              onClick={() => handleCopyToClipboard(address)}
-            >
-              {copiedText ? 'Copied!' : 'Copy'}
-            </Button>
-          )}
+          <Button
+            variant="link"
+            className={twJoin(
+              'cursor-pointer p-2',
+              copiedText && 'text-secondary'
+            )}
+            onClick={handleCopyAddress}
+          >
+            {copiedText ? 'Copied!' : 'Copy'}
+          </Button>
         </div>
       </CardContent>
     </>

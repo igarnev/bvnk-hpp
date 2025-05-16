@@ -23,7 +23,7 @@ export const AcceptQuoteConfirmPaymentButton = ({
   };
 
   return (
-    <CardFooter className="relative justify-between mt-4">
+    <CardFooter>
       <Button
         className="w-full"
         onClick={handleAcceptPaymentClick}

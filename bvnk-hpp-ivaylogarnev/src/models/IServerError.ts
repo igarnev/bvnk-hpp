@@ -3,4 +3,5 @@ export interface IServerError {
   readonly message: string;
   readonly parameter: string;
   readonly requestId: string;
+  readonly errorList: IServerError[];
 }
