@@ -264,12 +264,57 @@ describe('useUpdatePaymentSummary', () => {
       throw new Error('onError is undefined');
     }
 
-    const mockError = new Error('Test error') as AxiosError<IServerError>;
+    const mockError = new Error('Test error');
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     capturedOptions.onError({ error: mockError });
 
-    expect(handlePaymentError).toHaveBeenCalledWith(mockError, mockNavigate);
+    expect(handlePaymentError).toHaveBeenCalledWith(
+      { error: mockError },
+      mockNavigate
+    );
+  });
+
+  it('should handle error and call handlePaymentError', async () => {
+    let capturedOptions: MutationOptions | undefined;
+    vi.mocked(useMutation).mockImplementation((options) => {
+      capturedOptions = options as MutationOptions;
+      return {
+        mutate: vi.fn(),
+        mutateAsync: vi.fn(),
+        isPending: false,
+        isError: false,
+        isSuccess: false,
+        isIdle: true,
+        isPaused: false,
+        data: undefined,
+        error: null,
+        variables: undefined,
+        reset: vi.fn(),
+        status: 'idle',
+        context: undefined,
+        failureCount: 0,
+        failureReason: null,
+        submittedAt: Date.now()
+      };
+    });
+
+    renderHook(() => useUpdatePaymentSummary());
+
+    if (!capturedOptions?.onError) {
+      throw new Error('onError is undefined');
+    }
+
+    const mockError = new Error('Update failed');
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    capturedOptions.onError({ error: mockError });
+
+    expect(handlePaymentError).toHaveBeenCalledWith(
+      { error: mockError },
+      mockNavigate
+    );
   });
 
   it('should set up mocks correctly', () => {
@@ -303,11 +348,11 @@ describe('useUpdatePaymentSummary', () => {
     expect(handlePaymentError).not.toHaveBeenCalled();
   });
 
-  it('should set up mock return values correctly', () => {
+  it('should set up mock return values correctly', async () => {
     expect(useNavigate()).toBe(mockNavigate);
     expect(useParams()).toEqual({ uuid: mockUuid });
     expect(useQueryClient()).toBe(mockQueryClient);
-    expect(
+    await expect(
       paymentService.updatePaymentSummary(mockUuid, {
         currency: mockCurrency,
         payInMethod: 'crypto'
@@ -428,59 +473,6 @@ describe('useUpdatePaymentSummary', () => {
       ['paymentSummary', mockUuid],
       mockPaymentSummary
     );
-  });
-
-  it('should handle error and call handlePaymentError', async () => {
-    const mockError: AxiosError<IServerError> = new Error(
-      'Update failed'
-    ) as AxiosError<IServerError>;
-    const mockMutate = vi.fn();
-    const mockMutateAsync = vi.fn().mockImplementation(async () => {
-      try {
-        await paymentService.updatePaymentSummary(mockUuid, {
-          currency: mockCurrency,
-          payInMethod: 'crypto'
-        });
-      } catch (error) {
-        handlePaymentError(mockError, mockNavigate);
-        throw error;
-      }
-    });
-
-    let capturedOptions: MutationOptions | undefined;
-    vi.mocked(useMutation).mockImplementation((options) => {
-      capturedOptions = options as MutationOptions;
-      return {
-        mutate: mockMutate,
-        mutateAsync: mockMutateAsync,
-        isPending: false,
-        isError: true,
-        isSuccess: false,
-        isIdle: false,
-        isPaused: false,
-        data: undefined,
-        error: mockError,
-        variables: { currency: mockCurrency },
-        reset: vi.fn(),
-        status: 'error',
-        context: undefined,
-        failureCount: 1,
-        failureReason: mockError,
-        submittedAt: Date.now()
-      };
-    });
-
-    renderHook(() => useUpdatePaymentSummary());
-
-    if (!capturedOptions?.onError) {
-      throw new Error('onError is undefined');
-    }
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    capturedOptions.onError({ error: mockError });
-
-    expect(handlePaymentError).toHaveBeenCalledWith(mockError, mockNavigate);
   });
 
   it('should retry on failure up to 3 times', async () => {

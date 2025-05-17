@@ -3,9 +3,7 @@ import type { AxiosError } from 'axios';
 
 import type { IServerError } from '@models/IServerError';
 
-import { ROUTES } from '@utils/constants';
-
-const EXPIRED_PAYMENT_ERROR_CODES = ['MER-PAY-2017', 'MER-PAY-2004'] as const;
+import { EXPIRED_PAYMENT_ERROR_CODES, ROUTES } from '@utils/constants';
 
 export const handlePaymentError = (
   error: AxiosError<IServerError>,

@@ -10,6 +10,7 @@ import type { ICurrency } from '@models/ICurrency';
 import type { Address } from '@models/IAddress';
 import type { AxiosError } from 'axios';
 import type { IServerError } from '@models/IServerError';
+import { ROUTES } from '@utils/constants';
 
 // Mock dependencies
 const mockNavigate = vi.fn();
@@ -19,6 +20,10 @@ vi.mock('react-router-dom', () => ({
 }));
 
 const mockMutate = vi.fn();
+const mockSetQueryData = vi.fn();
+const mockQueryClient = {
+  setQueryData: mockSetQueryData
+};
 
 vi.mock('@tanstack/react-query', () => ({
   useMutation: ({
@@ -42,7 +47,8 @@ vi.mock('@tanstack/react-query', () => ({
       }
     },
     isPending: false
-  })
+  }),
+  useQueryClient: () => mockQueryClient
 }));
 
 vi.mock('@services/paymentService', () => ({
@@ -135,11 +141,25 @@ describe('useAcceptPayment', () => {
 
     await result.current.acceptPayment.mutateAsync();
 
-    expect(mockNavigate).toHaveBeenCalledWith('/payin/test-uuid/pay');
+    expect(mockNavigate).toHaveBeenCalledWith(
+      ROUTES.PAYMENT_PAY.replace(':uuid', 'test-uuid')
+    );
+    expect(mockSetQueryData).toHaveBeenCalledWith(
+      ['paymentSummary', 'test-uuid'],
+      mockPaymentSummary
+    );
   });
 
   it('should handle error and call handlePaymentError', async () => {
-    const mockError = new Error('Test error');
+    const mockError = {
+      isAxiosError: true,
+      response: {
+        data: {
+          message: 'Test error'
+        }
+      }
+    } as AxiosError<IServerError>;
+
     vi.mocked(paymentService.acceptPaymentSummary).mockRejectedValueOnce(
       mockError
     );

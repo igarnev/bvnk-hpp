@@ -12,13 +12,12 @@ export default defineConfig({
       '@assets': '/src/assets',
       '@components': '/src/components',
       '@features': '/src/features',
+      '@guards': '/src/guards',
+      '@hooks': '/src/hooks',
       '@models': '/src/models',
       '@pages': '/src/pages',
-      '@guards': '/src/guards',
-      '@lib': '/src/lib',
-      '@hooks': '/src/hooks',
-      '@styles': '/src/styles',
       '@services': '/src/services',
+      '@styles': '/src/styles',
       '@utils': '/src/utils'
     }
   },

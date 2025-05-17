@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ZodError } from 'zod';
 
-import { debouncedToast } from '@utils/helpers/debounce-toast';
+import { debouncedToast } from '@utils/helpers/toast';
 
 export const handleServiceError = (error: unknown): unknown => {
   if (error instanceof ZodError) {

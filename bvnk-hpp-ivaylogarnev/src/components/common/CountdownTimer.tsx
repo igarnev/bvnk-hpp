@@ -15,12 +15,14 @@ export const CountdownTimer = ({
   isLoading
 }: TCountdownTimerProps) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const hasExpiredRef = useRef(false);
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
   useEffect(() => {
     if (expiryDate) {
       const initialTimeLeft = getRemainingTime(Number(expiryDate));
       setTimeLeft(initialTimeLeft);
+      hasExpiredRef.current = false;
     }
   }, [expiryDate]);
 
@@ -31,7 +33,8 @@ export const CountdownTimer = ({
 
     timerRef.current = setInterval(() => {
       setTimeLeft((prevTime) => {
-        if (prevTime <= 1) {
+        if (prevTime <= 1 && !hasExpiredRef.current) {
+          hasExpiredRef.current = true;
           onExpire();
           return 0;
         }
@@ -45,7 +48,7 @@ export const CountdownTimer = ({
         timerRef.current = null;
       }
     };
-  }, [timeLeft, expiryDate, onExpire]);
+  }, [timeLeft, onExpire]);
 
   return (
     <div>

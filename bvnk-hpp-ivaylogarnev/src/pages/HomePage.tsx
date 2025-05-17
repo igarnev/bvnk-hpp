@@ -2,7 +2,7 @@ import { useUuidValidation } from '@hooks/useUuidValidation';
 
 import { Input } from '@components/ui/input';
 import { Card } from '@components/ui/card';
-import { HomePayButton } from '@/components/home/HomePayButton';
+import { HomePayButton } from '@components/home/HomePayButton';
 
 export const HomePage = () => {
   const { uuid, error: uuidError, handleUuidChange } = useUuidValidation();

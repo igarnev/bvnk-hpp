@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { usePaymentSummary } from '@hooks/usePaymentSummary';
 import { useUpdatePaymentSummary } from '@hooks/useUpdatePaymentSummary';
 
+import type { TUpdatePaymentSummary } from '@models/TUpdatePaymentSummary';
+
 import { Card } from '@components/ui/card';
 import { LoadingSpinner } from '@components/common/LoadingSpinner';
 import { ErrorBanner } from '@components/common/ErrorBanner';
@@ -42,7 +44,7 @@ export const AcceptQuotePage = () => {
         {selectedCurrency && (
           <AcceptQuotePaymentDetails
             currency={selectedCurrency}
-            updatePaymentSummary={updatePaymentSummary}
+            updatePaymentSummary={updatePaymentSummary as TUpdatePaymentSummary}
           />
         )}
         <AcceptQuoteConfirmPaymentButton

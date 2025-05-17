@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ZodError } from 'zod';
 import type { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios';
 import { handleServiceError } from '../handle-service-error';
-import { debouncedToast } from '@utils/helpers/debounce-toast';
+import { debouncedToast } from '../toast';
 
 // Mock the debouncedToast function
-vi.mock('@utils/helpers/debounce-toast', () => ({
+vi.mock('../toast', () => ({
   debouncedToast: vi.fn()
 }));
 

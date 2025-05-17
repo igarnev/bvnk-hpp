@@ -6,12 +6,11 @@ import {
   updatePaymentSummaryRequestSchema,
   acceptPaymentSummaryRequestSchema
 } from '@utils/schemas-zod';
+import { handleServiceError } from '@utils/helpers/handle-service-error';
 
 import type { IPaymentSummary } from '@models/IPaymentSummary';
 import type { TAcceptPaymentSummaryRequest } from '@models/TAcceptPaymentSummaryRequest';
 import type { TUpdatePaymentSummaryRequest } from '@models/TUpdatePaymentSummaryRequest';
-
-import { handleServiceError } from '@utils/helpers/handle-service-error';
 
 const API_BASE_URL = 'https://api.sandbox.bvnk.com/api/v1/pay';
 

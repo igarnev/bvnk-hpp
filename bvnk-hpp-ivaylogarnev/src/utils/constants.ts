@@ -15,3 +15,7 @@ export const ROUTES = {
 };
 
 export const DEBOUNCE_TIME = 5000;
+export const EXPIRED_PAYMENT_ERROR_CODES = [
+  'MER-PAY-2017',
+  'MER-PAY-2004'
+] as const;

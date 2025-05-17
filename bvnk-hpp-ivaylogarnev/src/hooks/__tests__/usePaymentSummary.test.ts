@@ -1,12 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook } from '@testing-library/react';
 import { useParams } from 'react-router-dom';
+import { renderHook } from '@testing-library/react';
 import { useQuery } from '@tanstack/react-query';
 import { usePaymentSummary } from '../usePaymentSummary';
 import { paymentService } from '@services/paymentService';
 import type { IPaymentSummary } from '@models/IPaymentSummary';
 import { EQuoteStatus } from '@models/EQuoteStatus';
 import { EStatus } from '@models/EStatus';
+import type { Mock } from 'vitest';
 
 // Mock the dependencies
 vi.mock('react-router-dom', () => ({
@@ -100,14 +101,14 @@ describe('usePaymentSummary', () => {
     expect(paymentService.getPaymentSummary).not.toHaveBeenCalled();
   });
 
-  it('should set up mock return values correctly', () => {
-    (useParams as jest.Mock).mockReturnValue({ uuid: mockUuid });
-    (useQuery as jest.Mock).mockReturnValue({
+  it('should set up mock return values correctly', async () => {
+    (useParams as Mock).mockReturnValue({ uuid: mockUuid });
+    (useQuery as Mock).mockReturnValue({
       data: mockPaymentSummary,
       isLoading: false,
       error: null
     });
-    (paymentService.getPaymentSummary as jest.Mock).mockResolvedValue(
+    (paymentService.getPaymentSummary as Mock).mockResolvedValue(
       mockPaymentSummary
     );
 
@@ -117,14 +118,14 @@ describe('usePaymentSummary', () => {
       isLoading: false,
       error: null
     });
-    expect(paymentService.getPaymentSummary(mockUuid)).resolves.toBe(
+    await expect(paymentService.getPaymentSummary(mockUuid)).resolves.toBe(
       mockPaymentSummary
     );
   });
 
   it('should initialize with empty states when UUID is invalid', () => {
-    (useParams as jest.Mock).mockReturnValue({ uuid: 'invalid-uuid' });
-    (useQuery as jest.Mock).mockReturnValue({
+    (useParams as Mock).mockReturnValue({ uuid: 'invalid-uuid' });
+    (useQuery as Mock).mockReturnValue({
       data: undefined,
       isLoading: false,
       error: null
@@ -138,13 +139,14 @@ describe('usePaymentSummary', () => {
     expect(useQuery).toHaveBeenCalledWith({
       queryKey: ['paymentSummary', 'invalid-uuid'],
       queryFn: expect.any(Function),
-      enabled: false
+      enabled: false,
+      staleTime: 30000
     });
   });
 
   it('should fetch payment summary when UUID is valid', () => {
-    (useParams as jest.Mock).mockReturnValue({ uuid: mockUuid });
-    (useQuery as jest.Mock).mockReturnValue({
+    (useParams as Mock).mockReturnValue({ uuid: mockUuid });
+    (useQuery as Mock).mockReturnValue({
       data: mockPaymentSummary,
       isLoading: false,
       error: null
@@ -158,13 +160,14 @@ describe('usePaymentSummary', () => {
     expect(useQuery).toHaveBeenCalledWith({
       queryKey: ['paymentSummary', mockUuid],
       queryFn: expect.any(Function),
-      enabled: true
+      enabled: true,
+      staleTime: 30000
     });
   });
 
   it('should handle loading state', () => {
-    (useParams as jest.Mock).mockReturnValue({ uuid: mockUuid });
-    (useQuery as jest.Mock).mockReturnValue({
+    (useParams as Mock).mockReturnValue({ uuid: mockUuid });
+    (useQuery as Mock).mockReturnValue({
       data: undefined,
       isLoading: true,
       error: null
@@ -179,8 +182,8 @@ describe('usePaymentSummary', () => {
 
   it('should handle error state', () => {
     const mockError = new Error('Failed to fetch payment summary');
-    (useParams as jest.Mock).mockReturnValue({ uuid: mockUuid });
-    (useQuery as jest.Mock).mockReturnValue({
+    (useParams as Mock).mockReturnValue({ uuid: mockUuid });
+    (useQuery as Mock).mockReturnValue({
       data: undefined,
       isLoading: false,
       error: mockError
@@ -194,11 +197,11 @@ describe('usePaymentSummary', () => {
   });
 
   it('should call paymentService.getPaymentSummary with correct UUID', async () => {
-    (useParams as jest.Mock).mockReturnValue({ uuid: mockUuid });
-    (paymentService.getPaymentSummary as jest.Mock).mockResolvedValue(
+    (useParams as Mock).mockReturnValue({ uuid: mockUuid });
+    (paymentService.getPaymentSummary as Mock).mockResolvedValue(
       mockPaymentSummary
     );
-    (useQuery as jest.Mock).mockImplementation(({ queryFn }) => ({
+    (useQuery as Mock).mockImplementation(({ queryFn }) => ({
       data: queryFn(),
       isLoading: false,
       error: null

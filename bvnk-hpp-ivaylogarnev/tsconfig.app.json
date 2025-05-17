@@ -28,14 +28,13 @@
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@features/*": ["src/features/*"],
+      "@guards/*": ["src/components/guards/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@models/*": ["src/models/*"],
       "@pages/*": ["src/pages/*"],
-      "@lib/*": ["src/lib/*"],
-      "@hooks/*": ["src/hooks/*"],
       "@services/*": ["src/services/*"],
       "@styles/*": ["src/styles/*"],
-      "@utils/*": ["src/utils/*"],
-      "@guards/*": ["src/components/guards/*"]
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["src"]

@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@utils/constants';
 
-import { usePaymentSummary } from '@/hooks/usePaymentSummary';
+import { usePaymentSummary } from '@hooks/usePaymentSummary';
+
 import { CardFooter } from '@components/ui/card';
 import { CountdownTimer } from '@components/common/CountdownTimer';
 import { CardSectionDivider } from '@components/common/CardSectionDivider';

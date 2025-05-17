@@ -25,6 +25,6 @@ describe('LoadingSpinner', () => {
 
     // Check loader icon styling
     const loader = container.querySelector('svg');
-    expect(loader).toHaveClass('h-8', 'w-8', 'animate-spin', 'text-primary');
+    expect(loader).toHaveClass('h-24', 'w-24', 'animate-spin', 'text-primary');
   });
 });

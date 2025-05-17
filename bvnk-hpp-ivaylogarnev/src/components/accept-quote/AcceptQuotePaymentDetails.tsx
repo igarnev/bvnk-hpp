@@ -1,22 +1,16 @@
 import { Loader2 } from 'lucide-react';
-import type { AxiosError } from 'axios';
-import type { UseMutationResult } from '@tanstack/react-query';
 
 import { usePaymentSummary } from '@hooks/usePaymentSummary';
 
-import type { IPaymentSummary } from '@models/IPaymentSummary';
+import type { TUpdatePaymentSummary } from '@models/TUpdatePaymentSummary';
 
 import { CardFooter } from '@components/ui/card';
 import { CountdownTimer } from '@components/common/CountdownTimer';
-import { CardSectionDivider } from '@/components/common/CardSectionDivider';
+import { CardSectionDivider } from '@components/common/CardSectionDivider';
 
 type TAcceptQuotePaymentDetailsProps = {
   readonly currency: string;
-  readonly updatePaymentSummary: UseMutationResult<
-    IPaymentSummary,
-    AxiosError,
-    { currency: string }
-  >;
+  readonly updatePaymentSummary: TUpdatePaymentSummary;
 };
 
 export const AcceptQuotePaymentDetails = ({

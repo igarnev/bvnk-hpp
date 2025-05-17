@@ -7,7 +7,8 @@ import { paymentService } from '@services/paymentService';
 import { handlePaymentError } from '@utils/helpers/error-payment';
 
 import type { TUuid } from '@models/TUuid';
-import type { IServerError } from '@/models/IServerError';
+import type { IServerError } from '@models/IServerError';
+
 export const useUpdatePaymentSummary = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -29,6 +30,7 @@ export const useUpdatePaymentSummary = () => {
     onError: (error: AxiosError<IServerError>) =>
       handlePaymentError(error, navigate),
     retry: 3,
+    // Exponential backoff for retry delays: 1s, 2s, 4s -> capped at 10s
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
   });
 

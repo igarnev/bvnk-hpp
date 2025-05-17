@@ -1,11 +1,12 @@
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
 import { paymentService } from '@services/paymentService';
 
 import type { TUuid } from '@models/TUuid';
-import { useMemo } from 'react';
-import { uuidSchema } from '@/utils/schemas-zod';
+
+import { uuidSchema } from '@utils/schemas-zod';
 
 export const usePaymentSummary = () => {
   const { uuid } = useParams<TUuid>() as TUuid;
@@ -20,7 +21,8 @@ export const usePaymentSummary = () => {
   } = useQuery({
     queryKey: ['paymentSummary', uuid],
     queryFn: () => paymentService.getPaymentSummary(uuid),
-    enabled: isUuidValid
+    enabled: isUuidValid,
+    staleTime: 30000
   });
 
   return {

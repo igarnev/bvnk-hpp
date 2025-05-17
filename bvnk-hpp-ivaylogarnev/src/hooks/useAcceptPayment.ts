@@ -1,6 +1,6 @@
 import type { AxiosError } from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { paymentService } from '@services/paymentService';
 
@@ -13,6 +13,7 @@ import type { IServerError } from '@models/IServerError';
 export const useAcceptPayment = () => {
   const navigate = useNavigate();
   const { uuid } = useParams<TUuid>() as TUuid;
+  const queryClient = useQueryClient();
 
   const acceptPayment = useMutation({
     mutationFn: async () => {
@@ -22,6 +23,7 @@ export const useAcceptPayment = () => {
     },
     onSuccess: (data) => {
       if (data) {
+        queryClient.setQueryData(['paymentSummary', uuid], data);
         navigate(ROUTES.PAYMENT_PAY.replace(':uuid', uuid));
       }
     },
