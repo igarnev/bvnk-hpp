@@ -157,4 +157,28 @@ describe('handleServiceError', () => {
       description: 'Invalid input format.'
     });
   });
+
+  it('should handle Axios errors with errorList message', () => {
+    const axiosError = new Error('Error from server') as AxiosError;
+    axiosError.isAxiosError = true;
+    axiosError.response = {
+      data: {
+        errorList: [
+          { message: 'Detailed error from errorList' }
+        ]
+      },
+      status: 400,
+      statusText: 'Bad Request',
+      headers: {},
+      config: {} as AxiosRequestConfig
+    } as AxiosResponse;
+  
+    expect(() => handleServiceError(axiosError)).toThrow();
+  
+    expect(debouncedToast).toHaveBeenCalledWith({
+      variant: 'destructive',
+      title: 'Network Error',
+      description: 'Detailed error from errorList'
+    });
+  });
 });

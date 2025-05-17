@@ -18,9 +18,8 @@ export const PaymentGuard = () => {
   const isPaymentExpired = useMemo(() => {
     return (
       paymentSummary?.status === EStatus.EXPIRED ||
-      (paymentSummary?.acceptanceExpiryDate &&
-        new Date(paymentSummary.acceptanceExpiryDate).getTime() <
-          new Date().getTime())
+      (paymentSummary?.expiryDate &&
+        new Date(paymentSummary.expiryDate).getTime() < new Date().getTime())
     );
   }, [paymentSummary?.acceptanceExpiryDate, paymentSummary?.status]);
 

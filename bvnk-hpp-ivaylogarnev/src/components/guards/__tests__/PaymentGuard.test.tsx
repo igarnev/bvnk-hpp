@@ -34,7 +34,7 @@ describe('PaymentGuard', () => {
   const mockPaymentSummary = {
     status: EStatus.PENDING,
     quoteStatus: EQuoteStatus.PENDING,
-    acceptanceExpiryDate: Date.now() + 3600000 // 1 hour from now
+    expiryDate: Date.now() + 3600000 // 1 hour from now
   };
 
   beforeEach(() => {
@@ -101,7 +101,7 @@ describe('PaymentGuard', () => {
     (usePaymentSummary as jest.Mock).mockReturnValue({
       paymentSummary: {
         ...mockPaymentSummary,
-        acceptanceExpiryDate: Date.now() - 1000 // 1 second ago
+        expiryDate: Date.now() - 500
       }
     });
     renderGuard();
@@ -122,7 +122,7 @@ describe('PaymentGuard', () => {
     (usePaymentSummary as jest.Mock).mockReturnValue({
       paymentSummary: {
         ...mockPaymentSummary,
-        acceptanceExpiryDate: null
+        expiryDate: null
       }
     });
     renderGuard();

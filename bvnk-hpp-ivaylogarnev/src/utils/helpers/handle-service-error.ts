@@ -15,7 +15,7 @@ export const handleServiceError = (error: unknown): unknown => {
       variant: 'destructive',
       title: 'Network Error',
       description:
-        error.response?.data?.message ??
+      error.response?.data?.errorList?.[0]?.message || error.response?.data?.message ||
         'Failed to communicate with the server. Please try again later.'
     });
   } else {

@@ -30,8 +30,8 @@ export const useUpdatePaymentSummary = () => {
     onError: (error: AxiosError<IServerError>) =>
       handlePaymentError(error, navigate),
     retry: 3,
-    // Exponential backoff for retry delays: 1s, 2s, 4s -> capped at 10s
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
+    // Exponential backoff for retry delays: 1s, 2s, 4s -> capped at 4s
+    retryDelay: (attemptIndex) => Math.min(500 * 2 ** attemptIndex, 4000)
   });
 
   return {

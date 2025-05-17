@@ -556,10 +556,10 @@ describe('useUpdatePaymentSummary', () => {
       throw new Error('Retry delay function was not captured');
     }
 
-    expect(capturedRetryDelay(0)).toBe(1000); // 1000 * 2^0
-    expect(capturedRetryDelay(1)).toBe(2000); // 1000 * 2^1
-    expect(capturedRetryDelay(2)).toBe(4000); // 1000 * 2^2
-    expect(capturedRetryDelay(3)).toBe(8000); // 1000 * 2^3
-    expect(capturedRetryDelay(4)).toBe(10000); // Capped at 10000
+    expect(capturedRetryDelay(0)).toBe(500); // 500 * 2^0
+    expect(capturedRetryDelay(1)).toBe(1000); // 500 * 2^1
+    expect(capturedRetryDelay(2)).toBe(2000); // 500 * 2^2
+    expect(capturedRetryDelay(3)).toBe(4000); // 500 * 2^3
+    expect(capturedRetryDelay(4)).toBe(4000); // Capped at 4000
   });
 });
